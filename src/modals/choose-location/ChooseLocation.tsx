@@ -39,7 +39,7 @@ const ChooseLocation = (props: ChooseLocationProps) => {
                         onClick={() => handleLocationClick(location)}
                     >
                         <p className="text-left text-xl font-semibold font-mono first-letter:uppercase transition-[color] duration-350 dark:text-white">{location.name}</p>
-                        <p className="text-left text-base font-mono first-letter:uppercase transition-[color] duration-350 dark:text-white">{location.addresstype + ' in ' + (location.address.county ? location.address.county + ', ' : '') + location.address.state}</p>
+                        <p className="text-left text-base font-mono first-letter:uppercase transition-[color] duration-350 dark:text-white">{location.addresstype + ', ' + (location.address.county ? location.address.county + ', ' : '') + location.address.state}</p>
                         <p className="text-left text-sm font-mono first-letter:uppercase transition-[color] duration-350 dark:text-white">{'Lat: ' + location.lat}</p>
                         <p className="text-left text-sm font-mono first-letter:uppercase transition-[color] duration-350 dark:text-white">{'Lon: ' + location.lon}</p>
                         <p className="text-left text-base font-mono first-letter:uppercase transition-[color] duration-350 dark:text-white">{location.address.country}</p>

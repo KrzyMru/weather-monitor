@@ -1,3 +1,3 @@
-import { getCircleWeatherData, getGeocodingData } from "./Api"
+import { getCircleWeatherData, getGeocodingDataByCoords, getGeocodingDataByName } from "./Api"
 
-export { getCircleWeatherData, getGeocodingData }
+export { getCircleWeatherData, getGeocodingDataByCoords, getGeocodingDataByName }

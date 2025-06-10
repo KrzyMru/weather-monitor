@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 import React, { useContext } from "react";
 import type { LatLngTuple, PathOptions } from "leaflet";
 import type { MapRef } from "react-leaflet/MapContainer";
-import { getCircleWeatherData, getGeocodingData } from "./api";
+import { getCircleWeatherData, getGeocodingDataByCoords, getGeocodingDataByName } from "./api";
 import type { LocationGeocodingData, LocationWeatherData } from "./api/types";
 import { SettingsContext } from "./contexts";
 import { Settings } from "./modals";
@@ -13,20 +13,23 @@ import { WeatherForecast } from "./modals/weather-forecast";
 const App = () => {
   const mapRef = React.useRef<MapRef>(null);
   const [mapCenterPosition, setMapCenterPosition] = React.useState<LatLngTuple>([52.237049, 21.017532]);
-  const [userChosenLocation, setUserChosenLocation] = React.useState<LatLngTuple|null>(null);
+  const [circlePosition, setCirclePosition] = React.useState<LatLngTuple|null>(null);
+  const [userChosenLocationGeocodingData, setUserChosenLocationGeocodingData] = React.useState<LocationGeocodingData|null>(null);
   const [locationSearchText, setLocationSearchText] = React.useState<string>("");
   const [userChosenLocationWeatherData, setUserChosenLocationWeatherData] = React.useState<LocationWeatherData|null>(null);
   const [locationSearchGeocodingData, setLocationSearchGeocodingData] = React.useState<LocationGeocodingData[]>([]);
   const [locatingUserPosition, setLocatingUserPosition] = React.useState<boolean>(false);
-  const [loadingGeocodingData, setLoadingGeocodingData] = React.useState<boolean>(false);
+  const [loadingGeocodingDataByName, setLoadingGeocodingDataByName] = React.useState<boolean>(false);
+  const [loadingGeocodingDataByCoords, setLoadingGeocodingDataByCoords] = React.useState<boolean>(false);
   const [loadingLocationWeatherData, setLoadingLocationWeatherData] = React.useState<boolean>(false);
   const [openSettings, setOpenSettings] = React.useState<boolean>(false);
+  const [openWeatherForecast, setOpenWeatherForecast] = React.useState<boolean>(false);
   const { darkMode, chooseLocationOnClick } = useContext(SettingsContext);
-  // Timers for smooth animations
+  // Timers for api cooldown
   const geocodingTimer = React.useRef<number|undefined>(undefined);
   const locationTimer = React.useRef<number|undefined>(undefined);
 
-  const circleOptions: PathOptions = { color: loadingLocationWeatherData ? '#ffbf28' : '#38aeff'}
+  const circleOptions: PathOptions = { color: (loadingLocationWeatherData || loadingGeocodingDataByCoords) ? '#ffbf28' : '#38aeff'}
   const circleRadius = 4500;
 
   const handleLocateUserPosition = () => {
@@ -35,6 +38,7 @@ const App = () => {
         // Found user position
         const { latitude, longitude } = position.coords;
         setMapCenterPosition([latitude, longitude]);
+        handleUserMapClick([latitude, longitude])
         setLocatingUserPosition(false);
       }, () => {
         // Error
@@ -43,31 +47,41 @@ const App = () => {
       {enableHighAccuracy: true, timeout: 5000, maximumAge: 0}
     );
   }
-  const handleUserChooseLocation = (location: LocationGeocodingData) => {
-    setMapCenterPosition([location.lat, location.lon]);
-    setUserChosenLocation([location.lat, location.lon]);
+  const handleUserChooseLocation = async (location: LocationGeocodingData) => {
+    const locationCoords: LatLngTuple = [location.lat, location.lon];
+    setMapCenterPosition(locationCoords);
+    setCirclePosition(locationCoords);
+    setUserChosenLocationGeocodingData(location);
+    // Wait for forecast data to correctly sync opening modal
+    await loadLocationWeatherData(locationCoords);
+    setOpenWeatherForecast(true);
+  }
+  const handleUserMapClick = (locationCoords: LatLngTuple) => {
+    setCirclePosition(locationCoords);   
+    setUserChosenLocationGeocodingData(null);  
+    setUserChosenLocationWeatherData(null);  
   }
 
-  const loadLocationWeatherData = async (location: LatLngTuple) => {
+  const loadLocationWeatherData = async (locationCoords: LatLngTuple) => {
     const startTime = Date.now();
     try {
       setLoadingLocationWeatherData(true);
-      const response = await getCircleWeatherData({ latitude: location[0], longitude: location[1] });
+      const response = await getCircleWeatherData({ latitude: locationCoords[0], longitude: locationCoords[1] });
       setUserChosenLocationWeatherData(response);
     } catch (e) { }
     finally {
       const minDelay = 600;
       const delay = Date.now() - startTime;
       if (locationTimer.current !== undefined)
-          clearTimeout(geocodingTimer.current)
+          clearTimeout(locationTimer.current)
       locationTimer.current = setTimeout(() => setLoadingLocationWeatherData(false), minDelay - delay);
     }
   }
-  const loadLocationGeocodingData = async (locationName: string) => {
+  const loadLocationGeocodingDataByName = async (locationName: string) => {
     const startTime = Date.now();
     try {
-      setLoadingGeocodingData(true);
-      const response = await getGeocodingData({ name: locationName });
+      setLoadingGeocodingDataByName(true);
+      const response = await getGeocodingDataByName({ name: locationName });
       setLocationSearchGeocodingData(response);
     } catch (e) { }
     finally {
@@ -75,7 +89,22 @@ const App = () => {
       const delay = Date.now() - startTime;
       if (geocodingTimer.current !== undefined)
           clearTimeout(geocodingTimer.current)
-      geocodingTimer.current = setTimeout(() => setLoadingGeocodingData(false), minDelay - delay);
+      geocodingTimer.current = setTimeout(() => setLoadingGeocodingDataByName(false), minDelay - delay);
+    }
+  }
+  const loadLocationGeocodingDataByCoords = async (locationCoords: LatLngTuple) => {
+    const startTime = Date.now();
+    try {
+      setLoadingGeocodingDataByCoords(true);
+      const response = await getGeocodingDataByCoords({ coords: locationCoords });
+      setUserChosenLocationGeocodingData(response);
+    } catch (e) { }
+    finally {
+      const minDelay = 600;
+      const delay = Date.now() - startTime;
+      if (geocodingTimer.current !== undefined)
+          clearTimeout(geocodingTimer.current)
+      geocodingTimer.current = setTimeout(() => setLoadingGeocodingDataByCoords(false), minDelay - delay);
     }
   }
 
@@ -92,29 +121,35 @@ const App = () => {
         clearTimeout(locationTimer.current);
     }
   }, []);
-  
+
   const MapEvents = () => {
     const map = useMapEvents({
-        click(e) {            
-          if(chooseLocationOnClick)               
-            setUserChosenLocation([
-                e.latlng.lat,
-                e.latlng.lng
-            ]);                
-        },            
+        click: (e) => {           
+          if(chooseLocationOnClick && !loadingGeocodingDataByCoords && 
+            !loadingGeocodingDataByName && !loadingLocationWeatherData
+          ) {          
+            handleUserMapClick([e.latlng.lat, e.latlng.lng]);
+          }    
+        }        
     });
 
     return (
-        userChosenLocation ? 
+        circlePosition ? 
             <Circle 
               className={loadingLocationWeatherData ? 'animate-pulse' : ''}
-              center={userChosenLocation} 
+              center={circlePosition} 
               pathOptions={circleOptions} 
               radius={circleRadius} 
               interactive={true}
               bubblingMouseEvents={false}
               eventHandlers={{ 
-                click: () => loadLocationWeatherData(userChosenLocation),
+                click: () => {
+                  if(userChosenLocationWeatherData === null)
+                    loadLocationWeatherData(circlePosition);
+                  if(userChosenLocationGeocodingData === null)
+                    loadLocationGeocodingDataByCoords(circlePosition);
+                  setOpenWeatherForecast(true);
+                },
               }}
             />
         : null
@@ -137,11 +172,12 @@ const App = () => {
           onLocationClick={handleUserChooseLocation}
       />
     }
-    {userChosenLocationWeatherData !== null &&
+    {openWeatherForecast && userChosenLocationWeatherData !== null && userChosenLocationGeocodingData !== null &&
       <WeatherForecast
-          open={userChosenLocationWeatherData !== null}
-          onClose={() => setUserChosenLocationWeatherData(null)}
+          open={openWeatherForecast && userChosenLocationWeatherData !== null && userChosenLocationGeocodingData !== null}
+          onClose={() => setOpenWeatherForecast(false)}
           weatherData={userChosenLocationWeatherData}
+          geocodingData={userChosenLocationGeocodingData}
       />
     }
   </React.Fragment>
@@ -195,25 +231,25 @@ const App = () => {
               autoComplete="off"
               autoFocus={true}
               value={locationSearchText}
-              disabled={loadingGeocodingData}
+              disabled={loadingGeocodingDataByName}
               onChange={(e) => setLocationSearchText(e.target.value)}
               onKeyDown={(e) => {
                 if(e.key === 'Enter') 
-                  loadLocationGeocodingData(locationSearchText)
+                  loadLocationGeocodingDataByName(locationSearchText)
               }}
             />
             <button 
               className="relative ml-[3px] bg-slate-200 shadow-lg rounded-r-xl border-l-1 border-gray-300 p-2 transition-[background-color_border-color] duration-350 dark:bg-slate-500 dark:border-gray-400 dark:hover:bg-slate-700 dark:active:bg-slate-800 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
               title={"Open favourite locations"}
               type="button"
-              disabled={loadingGeocodingData}
+              disabled={loadingGeocodingDataByName}
               onClick={() => {}}
             >
               {/* Favourite svg */}
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 viewBox="0 0 24 24"
-                className={`size-[32px] fill-rose-400 shrink-0 transition-[opacity] duration-350 ${loadingGeocodingData ? 'opacity-0' : 'opacity-100'}`}
+                className={`size-[32px] fill-rose-400 shrink-0 transition-[opacity] duration-350 ${loadingGeocodingDataByName ? 'opacity-0' : 'opacity-100'}`}
               >
                 <path d="m12 21l-1.45-1.3q-2.525-2.275-4.175-3.925T3.75 12.812Q2.775 11.5 2.388 10.4T2 8.15Q2 5.8 3.575 4.225T7.5 2.65q1.3 0 2.475.55T12 4.75q.85-1 2.025-1.55t2.475-.55q2.35 0 3.925 1.575T22 8.15q0 1.15-.388 2.25t-1.362 2.412q-.975 1.313-2.625 2.963T13.45 19.7L12 21Z"/>
               </svg>
@@ -221,7 +257,7 @@ const App = () => {
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 viewBox="0 0 24 24"
-                className={`absolute inset-0 fill-rose-400 animate-spin transition-[opacity] duration-350 ${loadingGeocodingData ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute inset-0 fill-rose-400 animate-spin transition-[opacity] duration-350 ${loadingGeocodingDataByName ? 'opacity-100' : 'opacity-0'}`}
               >
                 <path d="M12 22q-2.05 0-3.875-.788t-3.188-2.15q-1.362-1.362-2.15-3.187T2 12q0-2.075.788-3.888t2.15-3.174Q6.3 3.575 8.124 2.788T12 2q.425 0 .713.288T13 3q0 .425-.288.713T12 4Q8.675 4 6.337 6.337T4 12q0 3.325 2.337 5.663T12 20q3.325 0 5.663-2.337T20 12q0-.425.288-.713T21 11q.425 0 .713.288T22 12q0 2.05-.788 3.875t-2.15 3.188q-1.362 1.362-3.175 2.15T12 22Z"/>
               </svg>
