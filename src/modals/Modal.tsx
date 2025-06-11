@@ -1,11 +1,13 @@
 import React, { useCallback, useRef } from "react";
 import type { ModalBaseProps } from "./types";
+import { useTranslation } from "react-i18next";
 
 const Modal = (props: ModalBaseProps) => {
     const { open, onClose, children } = { ...props }
     const [render, setRender] = React.useState(false);
     const timer = useRef<number | undefined>(undefined);
     const modalRef = useRef<HTMLDivElement | null>(null);
+    const { t } = useTranslation();
 
     const handleClose = useCallback(() => {
         setRender(false);
@@ -101,7 +103,7 @@ const Modal = (props: ModalBaseProps) => {
                 <button
                     className="absolute top-2 right-2 p-1 rounded-lg hover:cursor-pointer focus:outline-none focus-visible:inset-ring-3 focus-visible:inset-ring-slate-500 dark:focus-visible:inset-ring-slate-300"
                     onClick={handleClose}
-                    title={"Close this modal"}
+                    title={t('modalCloseButtonTitle')}
                     type="button"
                 >
                     <svg

@@ -1,0 +1,62 @@
+{
+    "translation": {
+        "searchBarPlaceholder": "Enter location name",
+        "favouritesButtonTitle": "Open favourite locations.",
+        "settingsButtonTitle": "Open settings.",
+        "locationButtonTitle": "Try to center on your location.",
+        "modalCloseButtonTitle": "Close this window.",
+        "settings": {
+            "header": "Settings",
+            "darkModeHeader": "Dark mode",
+            "darkModeText": "Turn on dark mode for a more comfortable browsing experience in low-light conditions. This mode uses darker colors and lighter text to reduce eye strain.",
+            "darkModeButtonTitle": "Switch dark mode.",
+            "forecastOnClickHeader": "Forecast on click",
+            "forecastOnClickText": "Enable this feature to view the weather forecast for any location you click on the map. This works similarly to the geolocation search bar but allows for pinpointing specific locations.",
+            "forecastOnClickButtonTitle": "Switch forecast on click.",
+            "languageHeader": "Change language",
+            "languageText": "Adjust the app language to fit your preferences. This option cycles through all supported languages."
+        },
+        "chooseLocation": {
+            "header": "Choose location",
+            "noLocationsFound": "No locations were found",
+            "buttonTitle": "Select"
+        },
+        "weatherForecast": {
+            "temperatureApparent": "Apparent",
+            "rainChance": "Rain chance",
+            "hourButtonTitle": "Select",
+            "dayButtonTitle": "Select",
+            "geolocationInfoButtonTitle": "Show more information.",
+            "weatherNames": {
+                "ClearSky": "Clear sky",
+                "MainlyClear": "Mainly clear",
+                "PartlyCloudy": "Partly cloudy",
+                "Overcast": "Overcast",
+                "Fog": "Fog",
+                "DepositingRimeFog": "Depositing rime fog",
+                "DrizzleLight": "Light drizzle",
+                "DrizzleModerate": "Moderate drizzle",
+                "DrizzleDense": "Heavy drizzle",
+                "DrizzleFreezingLight": "Light freezing drizzle",
+                "DrizzleFreezingDense": "Heavy freezing drizzle",
+                "RainLight": "Light rain",
+                "RainModerate": "Moderate rain",
+                "RainDense": "Heavy rain",
+                "RainFreezingLight": "Light freezing rain",
+                "RainFreezingDense": "Heavy freezing rain",
+                "SnowLight": "Light snowfall",
+                "SnowModerate": "Moderate snowfall",
+                "SnowDense": "Heavy snowfall",
+                "SnowGrains": "Snow grains",
+                "RainShowerLight": "Light rain shower",
+                "RainShowerModerate": "Moderate rain shower",
+                "RainShowerDense": "Heavy rain shower",
+                "SnowShowerLight": "Light snow shower",
+                "SnowShowerDense": "Heavy snow shower",
+                "ThunderstormLightModerate": "Thunderstorm",
+                "ThunderstormHailLight": "Thunderstorm with light hail",
+                "ThunderstormHailDense": "Thunderstorm with heavy hail"
+            }
+        }
+    }
+}

@@ -3,14 +3,18 @@ import type { LatLngTuple } from "leaflet"
 interface GetCircleWeatherDataApiProps {
     latitude: number,
     longitude: number,
+    startDate: string,
+    endDate: string,
 }
 
 interface GetGeocodingDataByNameApiProps {
     name: string,
+    language: string,
 }
 
 interface GetGeocodingDataByCoordsApiProps {
     coords: LatLngTuple,
+    language: string,
 }
 
 interface LocationWeatherData {

@@ -1,0 +1,62 @@
+{
+    "translation": {
+        "searchBarPlaceholder": "Wprowadź nazwę lokalizacji",
+        "favouritesButtonTitle": "Otwórz ulubione lokalizacje.",
+        "settingsButtonTitle": "Otwórz ustawienia.",
+        "locationButtonTitle": "Spróbuj wycentrować na twojej lokalizacji.",
+        "modalCloseButtonTitle": "Zamknij to okno.",
+        "settings": {
+            "header": "Ustawienia",
+            "darkModeHeader": "Ciemny motyw",
+            "darkModeText": "Włącz tryb ciemny, aby zwiększyć komfort przeglądania w warunkach słabego oświetlenia. Ten tryb wykorzystuje ciemniejsze kolory i jaśniejszy tekst, aby zmniejszyć zmęczenie oczu.",
+            "darkModeButtonTitle": "Przełącz ciemny motyw.",
+            "forecastOnClickHeader": "Prognoza przy kliknięciu",
+            "forecastOnClickText": "Włącz tę funkcję, aby zobaczyć prognozę pogody dla dowolnego miejsca klikniętego na mapie. Działa podobnie do wyszukiwarki lokalizacji, ale pozwala precyzyjnie wskazać konkretne miejsca.",
+            "forecastOnClickButtonTitle": "Przełącz prognozę przy kliknięciu.",
+            "languageHeader": "Zmień język",
+            "languageText": "Dostosuj język aplikacji do swoich preferencji. Ta opcja pozwala przełączać się między wszystkimi obsługiwanymi językami."
+        },
+        "chooseLocation": {
+            "header": "Wybierz lokalizację",
+            "noLocationsFound": "Nie znaleziono żadnych lokalizacji.",
+            "buttonTitle": "Wybierz"
+        },
+        "weatherForecast": {
+            "temperatureApparent": "Odczuwalna",
+            "rainChance": "Ryzyko deszczu",
+            "hourButtonTitle": "Wybierz",
+            "dayButtonTitle": "Wybierz",
+            "geolocationInfoButtonTitle": "Wyświetl więcej informacji.",
+            "weatherNames": {
+                "ClearSky": "Bezchmurne niebo",
+                "MainlyClear": "Przeważnie bezchmurnie",
+                "PartlyCloudy": "Częściowe zachmurzenie",
+                "Overcast": "Całkowite zachmurzenie",
+                "Fog": "Mgła",
+                "DepositingRimeFog": "Mgła szadziowa",
+                "DrizzleLight": "Lekka mżawka",
+                "DrizzleModerate": "Umiarkowana mżawka",
+                "DrizzleDense": "Silna mżawka",
+                "DrizzleFreezingLight": "Lekka marznąca mżawka",
+                "DrizzleFreezingDense": "Silna marznąca mżawka",
+                "RainLight": "Lekki deszcz",
+                "RainModerate": "Umiarkowany deszcz",
+                "RainDense": "Silny deszcz",
+                "RainFreezingLight": "Lekki marznący deszcz",
+                "RainFreezingDense": "Silny marznący deszcz",
+                "SnowLight": "Lekki opad śniegu",
+                "SnowModerate": "Umiarkowany opad śniegu",
+                "SnowDense": "Silny opad śniegu",
+                "SnowGrains": "Ziarna śniegu",
+                "RainShowerLight": "Lekki przelotny deszcz",
+                "RainShowerModerate": "Umiarkowany przelotny deszcz",
+                "RainShowerDense": "Silny przelotny deszcz",
+                "SnowShowerLight": "Lekki przelotny śnieg",
+                "SnowShowerDense": "Silny przelotny śnieg",
+                "ThunderstormLightModerate": "Burza",
+                "ThunderstormHailLight": "Burza z drobnym gradem",
+                "ThunderstormHailDense": "Burza z silnym gradem"
+            }
+        }
+    }
+}

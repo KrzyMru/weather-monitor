@@ -9,6 +9,8 @@ import { SettingsContext } from "./contexts";
 import { Settings } from "./modals";
 import { ChooseLocation } from "./modals/choose-location";
 import { WeatherForecast } from "./modals/weather-forecast";
+import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 
 const App = () => {
   const mapRef = React.useRef<MapRef>(null);
@@ -28,7 +30,7 @@ const App = () => {
   // Timers for api cooldown
   const geocodingTimer = React.useRef<number|undefined>(undefined);
   const locationTimer = React.useRef<number|undefined>(undefined);
-
+  const { t, i18n } = useTranslation();
   const circleOptions: PathOptions = { color: (loadingLocationWeatherData || loadingGeocodingDataByCoords) ? '#ffbf28' : '#38aeff'}
   const circleRadius = 4500;
 
@@ -66,7 +68,11 @@ const App = () => {
     const startTime = Date.now();
     try {
       setLoadingLocationWeatherData(true);
-      const response = await getCircleWeatherData({ latitude: locationCoords[0], longitude: locationCoords[1] });
+      const startDate = dayjs().startOf('day');
+      const response = await getCircleWeatherData({ 
+        latitude: locationCoords[0], longitude: locationCoords[1],
+        startDate: startDate.format("YYYY-MM-DD"), endDate: startDate.add(6, 'days').format("YYYY-MM-DD"),
+      });
       setUserChosenLocationWeatherData(response);
     } catch (e) { }
     finally {
@@ -81,7 +87,7 @@ const App = () => {
     const startTime = Date.now();
     try {
       setLoadingGeocodingDataByName(true);
-      const response = await getGeocodingDataByName({ name: locationName });
+      const response = await getGeocodingDataByName({ name: locationName, language: i18n.language });
       setLocationSearchGeocodingData(response);
     } catch (e) { }
     finally {
@@ -96,7 +102,7 @@ const App = () => {
     const startTime = Date.now();
     try {
       setLoadingGeocodingDataByCoords(true);
-      const response = await getGeocodingDataByCoords({ coords: locationCoords });
+      const response = await getGeocodingDataByCoords({ coords: locationCoords, language: i18n.language });
       setUserChosenLocationGeocodingData(response);
     } catch (e) { }
     finally {
@@ -205,8 +211,8 @@ const App = () => {
       {/* Settings control */}
       <div className="absolute bottom-4 left-4 sm:bottom-auto sm:top-4 z-999">
         <button 
-          className="bg-gray-50 border-1 border-gray-300 rounded-full shadow-lg p-2 transition-[background-color] duration-350 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
-          title={"Open settings"}
+          className="bg-gray-50 border-1 border-gray-300 rounded-full shadow-xl p-2 transition-[background-color] duration-350 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
+          title={t('settingsButtonTitle')}
           type="button"
           onClick={() => setOpenSettings(true)}
         >
@@ -223,11 +229,11 @@ const App = () => {
 
       {/* Search bar */}
       <div className="absolute top-4 right-4 left-4 xs:right-20 sm:inset-x-24 z-999 transition-[left_right] duration-350">
-          <div className="flex rounded-xl shadow-lg bg-white border-1 border-gray-300 transition-[background-color] duration-350 dark:bg-gray-600">
+          <div className="flex rounded-xl shadow-xl bg-white border-1 border-gray-300 transition-[background-color] duration-350 dark:bg-gray-600">
             <input
               className="flex-1 bg-white rounded-l-xl p-2 transition-[background-color_color] duration-350 disabled:text-gray-300 disabled:bg-gray-100 dark:disabled:bg-gray-400 dark:disabled:text-gray-500 dark:bg-gray-600 dark:text-white dark:focus-visible:outline-sky-300 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
               type="text"
-              placeholder="Enter location name"
+              placeholder={t('searchBarPlaceholder')}
               autoComplete="off"
               autoFocus={true}
               value={locationSearchText}
@@ -239,8 +245,8 @@ const App = () => {
               }}
             />
             <button 
-              className="relative ml-[3px] bg-slate-200 shadow-lg rounded-r-xl border-l-1 border-gray-300 p-2 transition-[background-color_border-color] duration-350 dark:bg-slate-500 dark:border-gray-400 dark:hover:bg-slate-700 dark:active:bg-slate-800 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
-              title={"Open favourite locations"}
+              className="relative ml-[3px] bg-slate-200 rounded-r-xl border-l-1 border-gray-300 p-2 transition-[background-color_border-color] duration-350 dark:bg-slate-500 dark:border-gray-400 dark:hover:bg-slate-700 dark:active:bg-slate-800 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
+              title={t('favouritesButtonTitle')}
               type="button"
               disabled={loadingGeocodingDataByName}
               onClick={() => {}}
@@ -268,8 +274,8 @@ const App = () => {
       {/* Location control */}
       <div className="absolute bottom-4 right-4 xs:bottom-auto xs:top-4 z-999">
         <button 
-          className="relative bg-gray-50 border-1 border-gray-300 rounded-full shadow-lg p-2 transition-[background-color] duration-350 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 disabled:cursor-default disabled:pointer-events-none focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
-          title={"Center on your location"}
+          className="relative bg-gray-50 border-1 border-gray-300 rounded-full shadow-xl p-2 transition-[background-color] duration-350 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 disabled:cursor-default disabled:pointer-events-none focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
+          title={t('locationButtonTitle')}
           type="button"
           onClick={handleLocateUserPosition}
           disabled={locatingUserPosition}
