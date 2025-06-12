@@ -24,7 +24,7 @@ const getGeocodingDataByName = async (props: GetGeocodingDataByNameApiProps): Pr
         },
     });
     const data = await response.json();
-    if (!response.ok)
+    if (!response.ok || data?.error) // If unable to geocode API returns 200
         throw new Error(data?.reason);
     return data;
 }
@@ -38,7 +38,7 @@ const getGeocodingDataByCoords = async (props: GetGeocodingDataByCoordsApiProps)
         },
     });
     const data = await response.json();
-    if (!response.ok)
+    if (!response.ok || data?.error) // If unable to geocode API returns 200
         throw new Error(data?.reason);
     return data;
 }

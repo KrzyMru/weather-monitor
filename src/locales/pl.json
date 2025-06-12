@@ -5,6 +5,7 @@
         "settingsButtonTitle": "Otwórz ustawienia.",
         "locationButtonTitle": "Spróbuj wycentrować na twojej lokalizacji.",
         "modalCloseButtonTitle": "Zamknij to okno.",
+        "geolocationErrorDisplayName": "Brak informacji, Informacje geokodowania niedostępne",
         "settings": {
             "header": "Ustawienia",
             "darkModeHeader": "Ciemny motyw",
@@ -14,7 +15,8 @@
             "forecastOnClickText": "Włącz tę funkcję, aby zobaczyć prognozę pogody dla dowolnego miejsca klikniętego na mapie. Działa podobnie do wyszukiwarki lokalizacji, ale pozwala precyzyjnie wskazać konkretne miejsca.",
             "forecastOnClickButtonTitle": "Przełącz prognozę przy kliknięciu.",
             "languageHeader": "Zmień język",
-            "languageText": "Dostosuj język aplikacji do swoich preferencji. Ta opcja pozwala przełączać się między wszystkimi obsługiwanymi językami."
+            "languageText": "Dostosuj język aplikacji do swoich preferencji. Ta opcja pozwala przełączać się między wszystkimi obsługiwanymi językami.",
+            "languageButtonTitle": "Zmień język."
         },
         "chooseLocation": {
             "header": "Wybierz lokalizację",

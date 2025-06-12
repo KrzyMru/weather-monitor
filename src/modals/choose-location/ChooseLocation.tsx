@@ -22,17 +22,17 @@ const ChooseLocation = (props: ChooseLocationProps) => {
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24" 
-                    className={`size-[36px] fill-gray-900 mr-2 shrink-0 dark:fill-white`}
+                    className={`size-[36px] sm:size-[48px] lg:size-[56px] 2xl:size-[64px] transition: fill-gray-900 mr-2 transition-[width_height] duration-350 shrink-0 dark:fill-white`}
                 >
                     <path d="M8 17q.425 0 .713-.288T9 16q0-.425-.288-.713T8 15q-.425 0-.713.288T7 16q0 .425.288.713T8 17Zm0-4q.425 0 .713-.288T9 12q0-.425-.288-.713T8 11q-.425 0-.713.288T7 12q0 .425.288.713T8 13Zm0-4q.425 0 .713-.288T9 8q0-.425-.288-.713T8 7q-.425 0-.713.288T7 8q0 .425.288.713T8 9Zm3 8h6v-2h-6v2Zm0-4h6v-2h-6v2Zm0-4h6V7h-6v2ZM5 21q-.825 0-1.413-.588T3 19V5q0-.825.588-1.413T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.588 1.413T19 21H5Z"></path>
                 </svg>
-                <p className="text-2xl font-bold line-clamp-1 dark:text-white">{t('chooseLocation.header')}</p>
+                <p className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl [transition:font-size_350ms] font-bold line-clamp-1 dark:text-white">{t('chooseLocation.header')}</p>
             </div>
             <div className="border-b-1 border-gray-300 dark:border-gray-600" />
             <ul className="flex flex-col space-y-3 pt-6 pb-2">
                 {
                     locations.length === 0 ?
-                    <p className="text-base text-center font-sans line-clamp-1 text-gray-600 dark:text-gray-300">{t('chooseLocation.noLocationsFound')}</p>
+                    <p className="text-base sm:text-lg lg:text-xl 2xl:text-2xl [transition:font-size_350ms] text-center font-sans line-clamp-1 text-gray-600 dark:text-gray-300">{t('chooseLocation.noLocationsFound')}</p>
                     :
                     locations.map((location, index) => {
                         const geolocationLabels = location.display_name.split(',').slice(1);
@@ -43,15 +43,15 @@ const ChooseLocation = (props: ChooseLocationProps) => {
                                     title={t('chooseLocation.buttonTitle') + ': ' + location.display_name}
                                     onClick={() => handleLocationClick(location)}
                                 >
-                                    <p className="text-left text-xl font-semibold font-mono first-letter:uppercase dark:text-white">{location.name}</p>
+                                    <p className="text-left text-xl sm:text-2xl lg:text-3xl 2xl:text-4xl [transition:font-size_350ms] font-semibold font-mono first-letter:uppercase dark:text-white">{location.name}</p>
                                     <div className="flex flex-wrap space-x-2">
                                         {geolocationLabels.slice(0, -1).map((label, index) => (
-                                            <p key={index} className="text-left text-base font-mono first-letter:uppercase dark:text-white inline-block">{label + ', '}</p>
+                                            <p key={index} className="text-left text-base sm:text-lg lg:text-xl 2xl:text-2xl [transition:font-size_350ms] font-mono first-letter:uppercase dark:text-white inline-block">{label + ', '}</p>
                                         ))}
                                     </div>
-                                    <p key={index} className="text-left text-base font-mono first-letter:uppercase dark:text-white">{geolocationLabels[geolocationLabels.length-1]}</p>
-                                    <p className="text-left text-sm font-mono first-letter:uppercase dark:text-white">{'Lat: ' + location.lat}</p>
-                                    <p className="text-left text-sm font-mono first-letter:uppercase dark:text-white">{'Lon: ' + location.lon}</p>
+                                    <p key={index} className="text-left text-base sm:text-lg lg:text-xl 2xl:text-2xl [transition:font-size_350ms] font-mono first-letter:uppercase dark:text-white">{geolocationLabels[geolocationLabels.length-1]}</p>
+                                    <p className="text-left text-sm sm:text-base lg:text-lg 2xl:text-xl [transition:font-size_350ms] font-mono first-letter:uppercase dark:text-white">{'Lat: ' + location.lat}</p>
+                                    <p className="text-left text-sm sm:text-base lg:text-lg 2xl:text-xl [transition:font-size_350ms] font-mono first-letter:uppercase dark:text-white">{'Lon: ' + location.lon}</p>
                                 </button>
                             </li>
                         )

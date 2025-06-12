@@ -97,7 +97,7 @@ const Modal = (props: ModalBaseProps) => {
             tabIndex={-1} // focusable for clearing outside focus 
         >
             <div
-                className={`rounded-md shadow overflow-auto p-6 w-2xl max-h-full bg-white dark:bg-gray-800 relative ${render ? "scale-100 opacity-100" : "scale-125 opacity-0"} transition-[width_background-color_scale_opacity] duration-350`}
+                className={`rounded-md shadow overflow-auto p-6 w-2xl sm:w-3xl lg:w-4xl 2xl:w-5xl max-h-full bg-white dark:bg-gray-800 relative ${render ? "scale-100 opacity-100" : "scale-125 opacity-0"} transition-[width_background-color_scale_opacity] duration-350`}
                 onClick={event => event.stopPropagation()}
             >
                 <button

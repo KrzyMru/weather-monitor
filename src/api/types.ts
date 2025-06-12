@@ -60,7 +60,6 @@ interface LocationWeatherData {
 interface LocationGeocodingData {
     name: string,
     display_name: string,
-    addresstype: string,
     lat: number,
     lon: number,
     address: {

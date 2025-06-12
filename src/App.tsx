@@ -104,7 +104,19 @@ const App = () => {
       setLoadingGeocodingDataByCoords(true);
       const response = await getGeocodingDataByCoords({ coords: locationCoords, language: i18n.language });
       setUserChosenLocationGeocodingData(response);
-    } catch (e) { }
+    } catch (e) { 
+      // Things to display in forecast when location not found
+      const errorDisplayName = t('geolocationErrorDisplayName');
+      setUserChosenLocationGeocodingData({
+        lat: locationCoords[0],
+        lon: locationCoords[1],
+        name: errorDisplayName.split(',')[0],
+        display_name: errorDisplayName,
+        address: {
+          country: '',
+        }
+      });
+    }
     finally {
       const minDelay = 600;
       const delay = Date.now() - startTime;

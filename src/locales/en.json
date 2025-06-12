@@ -5,6 +5,7 @@
         "settingsButtonTitle": "Open settings.",
         "locationButtonTitle": "Try to center on your location.",
         "modalCloseButtonTitle": "Close this window.",
+        "geolocationErrorDisplayName": "No information, Geocoding information unavailable",
         "settings": {
             "header": "Settings",
             "darkModeHeader": "Dark mode",
@@ -14,7 +15,8 @@
             "forecastOnClickText": "Enable this feature to view the weather forecast for any location you click on the map. This works similarly to the geolocation search bar but allows for pinpointing specific locations.",
             "forecastOnClickButtonTitle": "Switch forecast on click.",
             "languageHeader": "Change language",
-            "languageText": "Adjust the app language to fit your preferences. This option cycles through all supported languages."
+            "languageText": "Adjust the app language to fit your preferences. This option cycles through all supported languages.",
+            "languageButtonTitle": "Change language."
         },
         "chooseLocation": {
             "header": "Choose location",
