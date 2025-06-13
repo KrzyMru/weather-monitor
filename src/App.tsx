@@ -280,7 +280,7 @@ const App = () => {
       {/* Settings control */}
       <div className="absolute bottom-4 left-4 lg:bottom-auto lg:top-4 z-999">
         <button 
-          className="bg-gray-50 border-1 border-gray-300 rounded-full shadow-xl p-2 transition-[background-color] duration-350 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
+          className="bg-slate-100 border-1 border-gray-300 rounded-full shadow-xl p-2 transition-[background-color] duration-350 hover:duration-0 hover:cursor-pointer hover:bg-slate-200 active:bg-slate-300 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300"
           title={t('settingsButtonTitle')}
           type="button"
           onClick={() => setOpenSettings(true)}
@@ -298,7 +298,7 @@ const App = () => {
 
       {/* Search bar */}
       <div className="absolute top-4 right-4 left-4 xs:right-20 lg:inset-x-24 z-999 transition-[left_right] duration-350">
-          <div className="flex rounded-xl shadow-xl border-1 border-gray-300 transition-[background-color] duration-350 bg-white dark:bg-gray-600">
+          <div className="flex rounded-xl shadow-xl border-1 border-gray-300 transition-[background-color] duration-350 bg-slate-100 dark:bg-gray-600">
             <input
               className="flex-1 bg-transparent rounded-l-xl p-2 transition-[color] duration-350 disabled:pointer-events-none disabled:cursor-default disabled:text-gray-300 dark:disabled:text-gray-500 dark:text-white dark:focus-visible:outline-sky-300 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
               type="text"
@@ -314,7 +314,7 @@ const App = () => {
               }}
             />
             <button 
-              className="relative ml-[3px] bg-slate-200 rounded-r-xl border-l-1 border-gray-300 p-2 transition-[background-color_border-color] duration-350 disabled:bg-slate-400 disabled:pointer-events-none disabled:cursor-default hover:duration-100 hover:cursor-pointer hover:bg-slate-300 active:bg-slate-400 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600 dark:disabled:bg-slate-800 dark:bg-slate-500 dark:border-gray-400 dark:hover:bg-slate-700 dark:active:bg-slate-800 dark:focus-visible:outline-sky-300"
+              className="relative ml-[3px] bg-slate-200 rounded-r-xl border-l-1 border-gray-300 p-2 transition-[background-color_border-color] duration-350 disabled:bg-slate-300 disabled:pointer-events-none disabled:cursor-default hover:duration-0 hover:cursor-pointer hover:bg-slate-300 active:bg-slate-400 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600 dark:disabled:bg-slate-700 dark:bg-slate-500 dark:border-gray-400 dark:hover:bg-slate-700 dark:active:bg-slate-800 dark:focus-visible:outline-sky-300"
               title={t('favouritesButtonTitle')}
               type="button"
               disabled={loadingGeocodingDataByName}
@@ -343,7 +343,7 @@ const App = () => {
       {/* Location control */}
       <div className="absolute bottom-4 right-4 xs:bottom-auto xs:top-4 z-999">
         <button 
-          className="relative bg-gray-50 border-1 border-gray-300 rounded-full shadow-xl p-2 transition-[background-color] duration-350 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 disabled:cursor-default disabled:pointer-events-none focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
+          className="relative bg-slate-100 border-1 border-gray-300 rounded-full shadow-xl p-2 transition-[background-color] duration-350 hover:duration-0 hover:cursor-pointer hover:bg-slate-200 active:bg-slate-300 disabled:cursor-default disabled:pointer-events-none focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300"
           title={t('locationButtonTitle')}
           type="button"
           onClick={handleLocateUserPosition}

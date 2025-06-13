@@ -19,8 +19,13 @@ const Modal = (props: ModalBaseProps) => {
     }, [onClose]);
 
     React.useEffect(() => {
+        // prevent possible sudden opening
         if (open) {
-            setRender(true);
+            if (timer.current !== undefined)
+                clearTimeout(timer.current);
+            timer.current = setTimeout(() => {
+                setRender(true);
+            }, 50);
         }
     }, [open]);
 
