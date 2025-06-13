@@ -57,19 +57,18 @@ interface LocationWeatherData {
     },
 }
 
-interface LocationGeocodingData {
+interface LocationGeocodingDataApiResponse {
+    osm_id: number,
     name: string,
     display_name: string,
     lat: number,
     lon: number,
-    address: {
-        county?: string,
-        state?: string,
-        country: string,
-    }
+}
+interface LocationGeocodingData extends LocationGeocodingDataApiResponse {
+    is_favourite: boolean,
 }
 
 export type {
     GetCircleWeatherDataApiProps, GetGeocodingDataByNameApiProps, GetGeocodingDataByCoordsApiProps,
-    LocationWeatherData, LocationGeocodingData
+    LocationGeocodingDataApiResponse, LocationWeatherData, LocationGeocodingData
 }

@@ -26,11 +26,25 @@ const App = () => {
   const [loadingLocationWeatherData, setLoadingLocationWeatherData] = React.useState<boolean>(false);
   const [openSettings, setOpenSettings] = React.useState<boolean>(false);
   const [openWeatherForecast, setOpenWeatherForecast] = React.useState<boolean>(false);
+  const [openFavouriteLocations, setOpenFavouriteLocations] = React.useState<boolean>(false);
   const { darkMode, chooseLocationOnClick } = useContext(SettingsContext);
   // Timers for api cooldown
   const geocodingTimer = React.useRef<number|undefined>(undefined);
   const locationTimer = React.useRef<number|undefined>(undefined);
   const { t, i18n } = useTranslation();
+  const [favouriteLocations, setFavouriteLocations] = React.useState<LocationGeocodingData[]>(
+      () => {
+          try {
+              const item = localStorage.getItem("favouriteLocations");
+              if (item === undefined || item === null)
+                  throw new Error();
+              return JSON.parse(item);
+          } catch (e: unknown) {
+              return [];
+          }
+      }
+  );
+
   const circleOptions: PathOptions = { color: (loadingLocationWeatherData || loadingGeocodingDataByCoords) ? '#ffbf28' : '#38aeff'}
   const circleRadius = 4500;
 
@@ -57,6 +71,12 @@ const App = () => {
     // Wait for forecast data to correctly sync opening modal
     await loadLocationWeatherData(locationCoords);
     setOpenWeatherForecast(true);
+  }
+  const handleAddRemoveLocationFavourites = (location: LocationGeocodingData) => {
+    if(favouriteLocations.find(loc => loc.osm_id === location.osm_id) === undefined)
+      setFavouriteLocations(prevLocations => [...prevLocations, {...location, is_favourite: true}]);
+    else
+      setFavouriteLocations(prevLocations => prevLocations.filter(loc => loc.osm_id !== location.osm_id));
   }
   const handleUserMapClick = (locationCoords: LatLngTuple) => {
     setCirclePosition(locationCoords);   
@@ -88,7 +108,12 @@ const App = () => {
     try {
       setLoadingGeocodingDataByName(true);
       const response = await getGeocodingDataByName({ name: locationName, language: i18n.language });
-      setLocationSearchGeocodingData(response);
+      // Mark locations as favourite
+      const favouriteIds = new Set(favouriteLocations.map(loc => loc.osm_id));
+      const responseWithFavourites: LocationGeocodingData[] = response.map((location) => ({
+        ...location, is_favourite: favouriteIds.has(location.osm_id)
+      }));
+      setLocationSearchGeocodingData(responseWithFavourites);
     } catch (e) { }
     finally {
       const minDelay = 600;
@@ -103,18 +128,20 @@ const App = () => {
     try {
       setLoadingGeocodingDataByCoords(true);
       const response = await getGeocodingDataByCoords({ coords: locationCoords, language: i18n.language });
-      setUserChosenLocationGeocodingData(response);
+      // Mark locations as favourite
+      const favouriteIds = new Set(favouriteLocations.map(loc => loc.osm_id));
+      const responseWithFavourites: LocationGeocodingData = {...response, is_favourite: favouriteIds.has(response.osm_id)};
+      setUserChosenLocationGeocodingData(responseWithFavourites);
     } catch (e) { 
       // Things to display in forecast when location not found
       const errorDisplayName = t('geolocationErrorDisplayName');
       setUserChosenLocationGeocodingData({
+        osm_id: -1,
         lat: locationCoords[0],
         lon: locationCoords[1],
         name: errorDisplayName.split(',')[0],
         display_name: errorDisplayName,
-        address: {
-          country: '',
-        }
+        is_favourite: false,
       });
     }
     finally {
@@ -140,15 +167,34 @@ const App = () => {
     }
   }, []);
 
+  React.useEffect(() => {
+    localStorage.setItem("favouriteLocations", JSON.stringify(favouriteLocations));
+    // Update search results and forecast data
+    const favouriteIds = new Set(favouriteLocations.map(loc => loc.osm_id));
+    setLocationSearchGeocodingData(prevLocations =>
+      prevLocations.map(prevLoc => ({
+        ...prevLoc,
+        is_favourite: favouriteIds.has(prevLoc.osm_id),
+      }))
+    );
+    setUserChosenLocationGeocodingData(prevLocation => {
+      if (prevLocation === null) return prevLocation;
+      return {
+        ...prevLocation,
+        is_favourite: favouriteIds.has(prevLocation.osm_id),
+      };
+    });
+  }, [favouriteLocations]);
+
   const MapEvents = () => {
-    const map = useMapEvents({
-        click: (e) => {           
-          if(chooseLocationOnClick && !loadingGeocodingDataByCoords && 
-            !loadingGeocodingDataByName && !loadingLocationWeatherData
-          ) {          
-            handleUserMapClick([e.latlng.lat, e.latlng.lng]);
-          }    
-        }        
+    useMapEvents({
+      click: (e) => {           
+        if(chooseLocationOnClick && !loadingGeocodingDataByCoords && 
+          !loadingGeocodingDataByName && !loadingLocationWeatherData
+        ) {          
+          handleUserMapClick([e.latlng.lat, e.latlng.lng]);
+        }    
+      }        
     });
 
     return (
@@ -188,6 +234,16 @@ const App = () => {
           onClose={() => setLocationSearchGeocodingData([])}
           locations={locationSearchGeocodingData}
           onLocationClick={handleUserChooseLocation}
+          onLocationFavouriteClick={handleAddRemoveLocationFavourites}
+      />
+    }
+    {openFavouriteLocations &&
+      <ChooseLocation
+          open={openFavouriteLocations}
+          onClose={() => setOpenFavouriteLocations(false)}
+          locations={favouriteLocations}
+          onLocationClick={handleUserChooseLocation}
+          onLocationFavouriteClick={handleAddRemoveLocationFavourites}
       />
     }
     {openWeatherForecast && userChosenLocationWeatherData !== null && userChosenLocationGeocodingData !== null &&
@@ -196,6 +252,7 @@ const App = () => {
           onClose={() => setOpenWeatherForecast(false)}
           weatherData={userChosenLocationWeatherData}
           geocodingData={userChosenLocationGeocodingData}
+          onLocationFavouriteClick={handleAddRemoveLocationFavourites}
       />
     }
   </React.Fragment>
@@ -221,7 +278,7 @@ const App = () => {
       </div>
 
       {/* Settings control */}
-      <div className="absolute bottom-4 left-4 sm:bottom-auto sm:top-4 z-999">
+      <div className="absolute bottom-4 left-4 lg:bottom-auto lg:top-4 z-999">
         <button 
           className="bg-gray-50 border-1 border-gray-300 rounded-full shadow-xl p-2 transition-[background-color] duration-350 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
           title={t('settingsButtonTitle')}
@@ -240,10 +297,10 @@ const App = () => {
       </div>
 
       {/* Search bar */}
-      <div className="absolute top-4 right-4 left-4 xs:right-20 sm:inset-x-24 z-999 transition-[left_right] duration-350">
-          <div className="flex rounded-xl shadow-xl bg-white border-1 border-gray-300 transition-[background-color] duration-350 dark:bg-gray-600">
+      <div className="absolute top-4 right-4 left-4 xs:right-20 lg:inset-x-24 z-999 transition-[left_right] duration-350">
+          <div className="flex rounded-xl shadow-xl border-1 border-gray-300 transition-[background-color] duration-350 bg-white dark:bg-gray-600">
             <input
-              className="flex-1 bg-white rounded-l-xl p-2 transition-[background-color_color] duration-350 disabled:text-gray-300 disabled:bg-gray-100 dark:disabled:bg-gray-400 dark:disabled:text-gray-500 dark:bg-gray-600 dark:text-white dark:focus-visible:outline-sky-300 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
+              className="flex-1 bg-transparent rounded-l-xl p-2 transition-[color] duration-350 disabled:pointer-events-none disabled:cursor-default disabled:text-gray-300 dark:disabled:text-gray-500 dark:text-white dark:focus-visible:outline-sky-300 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
               type="text"
               placeholder={t('searchBarPlaceholder')}
               autoComplete="off"
@@ -257,11 +314,11 @@ const App = () => {
               }}
             />
             <button 
-              className="relative ml-[3px] bg-slate-200 rounded-r-xl border-l-1 border-gray-300 p-2 transition-[background-color_border-color] duration-350 dark:bg-slate-500 dark:border-gray-400 dark:hover:bg-slate-700 dark:active:bg-slate-800 dark:focus-visible:outline-sky-300 hover:duration-100 hover:cursor-pointer hover:bg-gray-100 active:bg-gray-200 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
+              className="relative ml-[3px] bg-slate-200 rounded-r-xl border-l-1 border-gray-300 p-2 transition-[background-color_border-color] duration-350 disabled:bg-slate-400 disabled:pointer-events-none disabled:cursor-default hover:duration-100 hover:cursor-pointer hover:bg-slate-300 active:bg-slate-400 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600 dark:disabled:bg-slate-800 dark:bg-slate-500 dark:border-gray-400 dark:hover:bg-slate-700 dark:active:bg-slate-800 dark:focus-visible:outline-sky-300"
               title={t('favouritesButtonTitle')}
               type="button"
               disabled={loadingGeocodingDataByName}
-              onClick={() => {}}
+              onClick={() => setOpenFavouriteLocations(true)}
             >
               {/* Favourite svg */}
               <svg 

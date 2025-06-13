@@ -6,6 +6,8 @@
         "locationButtonTitle": "Spróbuj wycentrować na twojej lokalizacji.",
         "modalCloseButtonTitle": "Zamknij to okno.",
         "geolocationErrorDisplayName": "Brak informacji, Informacje geokodowania niedostępne",
+        "favouriteButtonTitle": "Dodaj lokalizację do ulubionych.",
+        "unfavouriteButtonTitle": "Usuń lokalizację z ulubionych.",
         "settings": {
             "header": "Ustawienia",
             "darkModeHeader": "Ciemny motyw",
@@ -21,7 +23,7 @@
         "chooseLocation": {
             "header": "Wybierz lokalizację",
             "noLocationsFound": "Nie znaleziono żadnych lokalizacji.",
-            "buttonTitle": "Wybierz"
+            "locationButtonTitle": "Wybierz"
         },
         "weatherForecast": {
             "temperatureApparent": "Odczuwalna",

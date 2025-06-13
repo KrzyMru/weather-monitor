@@ -1,4 +1,4 @@
-import type { LocationGeocodingData, GetCircleWeatherDataApiProps, GetGeocodingDataByNameApiProps, GetGeocodingDataByCoordsApiProps, LocationWeatherData } from "./types";
+import type { GetCircleWeatherDataApiProps, GetGeocodingDataByNameApiProps, GetGeocodingDataByCoordsApiProps, LocationWeatherData, LocationGeocodingDataApiResponse } from "./types";
 
 const getCircleWeatherData = async (props: GetCircleWeatherDataApiProps): Promise<LocationWeatherData> => {
     const { latitude, longitude, startDate, endDate } = { ...props }
@@ -15,7 +15,7 @@ const getCircleWeatherData = async (props: GetCircleWeatherDataApiProps): Promis
     return data;
 }
 
-const getGeocodingDataByName = async (props: GetGeocodingDataByNameApiProps): Promise<LocationGeocodingData[]> => {
+const getGeocodingDataByName = async (props: GetGeocodingDataByNameApiProps): Promise<LocationGeocodingDataApiResponse[]> => {
     const { name, language } = { ...props }
     const response = await fetch(`http://nominatim.openstreetmap.org/search?q=${name}&addressdetails=1&featureType=city&accept-language=${language}&format=json`, {
         method: "GET",
@@ -29,7 +29,7 @@ const getGeocodingDataByName = async (props: GetGeocodingDataByNameApiProps): Pr
     return data;
 }
 
-const getGeocodingDataByCoords = async (props: GetGeocodingDataByCoordsApiProps): Promise<LocationGeocodingData> => {
+const getGeocodingDataByCoords = async (props: GetGeocodingDataByCoordsApiProps): Promise<LocationGeocodingDataApiResponse> => {
     const { coords, language } = { ...props }
     const response = await fetch(`https://nominatim.openstreetmap.org/reverse?&lat=${coords[0]}&lon=${coords[1]}&addressdetails=1&zoom=10&accept-language=${language}&format=json`, {
         method: "GET",
