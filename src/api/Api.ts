@@ -17,7 +17,7 @@ const getCircleWeatherData = async (props: GetCircleWeatherDataApiProps): Promis
 
 const getGeocodingDataByName = async (props: GetGeocodingDataByNameApiProps): Promise<LocationGeocodingDataApiResponse[]> => {
     const { name, language } = { ...props }
-    const response = await fetch(`http://nominatim.openstreetmap.org/search?q=${name}&addressdetails=1&featureType=city&accept-language=${language}&format=json`, {
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${name}&addressdetails=1&featureType=city&accept-language=${language}&format=json`, {
         method: "GET",
         headers: {
             "Accept": "application/json",
