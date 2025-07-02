@@ -16,4 +16,9 @@ i18n
         interpolation: {
             escapeValue: false, // not needed for react as it escapes by default
         }
+    })
+    .then(() => {
+        document.documentElement.setAttribute('lang', i18n.language);
     });
+
+i18n.on('languageChanged', (lng) => {document.documentElement.setAttribute('lang', lng);});
