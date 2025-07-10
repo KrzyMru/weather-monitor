@@ -258,7 +258,7 @@ const App = () => {
   </React.Fragment>
 
   return (
-    <div className={`h-screen w-screen relative ${darkMode ? 'dark' : ''}`}>
+    <div className={`h-dvh w-dvw relative ${darkMode ? 'dark' : ''}`}>
 
       {/* Dark mode prefix (dark:) doesn't work well with this custom utility, so this conditional expression is necessary */}
       <div className={`w-full h-full ${darkMode ? 'leaflet-dark-mode' : ''}`}> 
