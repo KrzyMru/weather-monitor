@@ -36,7 +36,7 @@ import ThunderstormHailDenseNight from "./thunderstorms-night-dense-hail.svg?rea
 
 export { 
     InfoOutline, Heart, HeartBroken,
-    RaindropFull, RaindropThreeQuarter, RaindropHalf, RaindropQuarter, RaindropEmpty, 
+    RaindropFull, RaindropThreeQuarter, RaindropHalf, RaindropQuarter, RaindropEmpty,
     ClearDay, MainlyClearDay, PartlyCloudyDay, OvercastDay, FogDay, DrizzleLightDay, RainLightDay, SnowLightDay, SleetDay, ThunderstormDay, ThunderstormHailLightDay, ThunderstormHailDenseDay,
     ClearNight, MainlyClearNight, PartlyCloudyNight, OvercastNight, FogNight, DrizzleLightNight, RainLightNight, SnowLightNight, SleetNight, ThunderstormNight, ThunderstormHailLightNight, ThunderstormHailDenseNight
 }

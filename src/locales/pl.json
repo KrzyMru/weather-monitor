@@ -31,6 +31,7 @@
             "hourButtonTitle": "Wybierz",
             "dayButtonTitle": "Wybierz",
             "geolocationInfoButtonTitle": "Wyświetl więcej informacji.",
+            "now": "Teraz",
             "weatherNames": {
                 "ClearSky": "Bezchmurne niebo",
                 "MainlyClear": "Przeważnie bezchmurnie",

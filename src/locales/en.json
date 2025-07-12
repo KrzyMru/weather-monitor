@@ -31,6 +31,7 @@
             "hourButtonTitle": "Select",
             "dayButtonTitle": "Select",
             "geolocationInfoButtonTitle": "Show more information.",
+            "now": "Now",
             "weatherNames": {
                 "ClearSky": "Clear sky",
                 "MainlyClear": "Mainly clear",
