@@ -6,7 +6,7 @@ import type { MapRef } from "react-leaflet/MapContainer";
 import { getCircleWeatherData, getGeocodingDataByCoords, getGeocodingDataByName } from "./api";
 import type { LocationGeocodingData, LocationWeatherData } from "./api/types";
 import { SettingsContext } from "./contexts";
-import { Settings } from "./modals";
+import { Settings } from "./modals/base-modal";
 import { ChooseLocation } from "./modals/choose-location";
 import { WeatherForecast } from "./modals/weather-forecast";
 import { useTranslation } from "react-i18next";
@@ -280,7 +280,7 @@ const App = () => {
       {/* Settings control */}
       <div className="absolute bottom-4 left-4 lg:bottom-auto lg:top-4 z-999">
         <button 
-          className="bg-slate-100 border-1 border-gray-300 rounded-full shadow-xl p-2 transition-[background-color] duration-350 hover:duration-0 hover:cursor-pointer hover:bg-slate-200 active:bg-slate-300 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300"
+          className="bg-slate-100 border-1 border-gray-300 rounded-full shadow-xl p-2 hover:cursor-pointer hover:bg-slate-200 active:bg-slate-300 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300"
           title={t('settingsButtonTitle')}
           type="button"
           onClick={() => setOpenSettings(true)}
@@ -289,7 +289,7 @@ const App = () => {
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             viewBox="0 0 24 24"
-            className="size-[32px] shrink-0 transition-[fill] duration-350 fill-gray-900 dark:fill-white"
+            className="size-[32px] shrink-0 fill-gray-900 dark:fill-white"
           >
             <path d="m9.25 22l-.4-3.2q-.325-.125-.613-.3t-.562-.375L4.7 19.375l-2.75-4.75l2.575-1.95Q4.5 12.5 4.5 12.337v-.674q0-.163.025-.338L1.95 9.375l2.75-4.75l2.975 1.25q.275-.2.575-.375t.6-.3l.4-3.2h5.5l.4 3.2q.325.125.613.3t.562.375l2.975-1.25l2.75 4.75l-2.575 1.95q.025.175.025.338v.674q0 .163-.05.338l2.575 1.95l-2.75 4.75l-2.95-1.25q-.275.2-.575.375t-.6.3l-.4 3.2h-5.5Zm2.8-6.5q1.45 0 2.475-1.025T15.55 12q0-1.45-1.025-2.475T12.05 8.5q-1.475 0-2.488 1.025T8.55 12q0 1.45 1.012 2.475T12.05 15.5Z"/>
           </svg>
@@ -298,9 +298,9 @@ const App = () => {
 
       {/* Search bar */}
       <div className="absolute top-4 right-4 left-4 xs:right-20 lg:inset-x-24 z-999 transition-[left_right] duration-350">
-          <div className="flex rounded-xl shadow-xl border-1 border-gray-300 transition-[background-color] duration-350 bg-slate-100 dark:bg-gray-600">
+          <div className="flex rounded-xl shadow-xl border-1 border-gray-300 bg-slate-100 dark:bg-gray-600">
             <input
-              className="flex-1 bg-transparent rounded-l-xl p-2 transition-[color] duration-350 disabled:pointer-events-none disabled:cursor-default disabled:text-gray-300 dark:disabled:text-gray-500 dark:text-white dark:focus-visible:outline-sky-300 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600"
+              className="flex-1 bg-transparent rounded-l-xl p-2 disabled:pointer-events-none disabled:cursor-default disabled:text-gray-300 dark:disabled:text-gray-500 dark:text-white dark:focus-visible:outline-sky-300 focus-visible:outline-3 focus-visible:outline-sky-600"
               type="text"
               placeholder={t('searchBarPlaceholder')}
               autoComplete="off"
@@ -314,7 +314,7 @@ const App = () => {
               }}
             />
             <button 
-              className="relative ml-[3px] bg-slate-200 rounded-r-xl border-l-1 border-gray-300 p-2 transition-[background-color_border-color] duration-350 disabled:bg-slate-300 disabled:pointer-events-none disabled:cursor-default hover:duration-0 hover:cursor-pointer hover:bg-slate-300 active:bg-slate-400 focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600 dark:disabled:bg-slate-700 dark:bg-slate-500 dark:border-gray-400 dark:hover:bg-slate-700 dark:active:bg-slate-800 dark:focus-visible:outline-sky-300"
+              className="relative ml-[3px] bg-slate-200 rounded-r-xl border-l-1 border-gray-300 p-2 disabled:bg-slate-300 disabled:pointer-events-none disabled:cursor-default hover:cursor-pointer hover:bg-slate-300 active:bg-slate-400 focus-visible:outline-3 focus-visible:outline-sky-600 dark:disabled:bg-slate-700 dark:bg-slate-500 dark:border-gray-400 dark:hover:bg-slate-700 dark:active:bg-slate-800 dark:focus-visible:outline-sky-300"
               title={t('favouritesButtonTitle')}
               type="button"
               disabled={loadingGeocodingDataByName}
@@ -343,7 +343,7 @@ const App = () => {
       {/* Location control */}
       <div className="absolute bottom-4 right-4 xs:bottom-auto xs:top-4 z-999">
         <button 
-          className="relative bg-slate-100 border-1 border-gray-300 rounded-full shadow-xl p-2 transition-[background-color] duration-350 hover:duration-0 hover:cursor-pointer hover:bg-slate-200 active:bg-slate-300 disabled:cursor-default disabled:pointer-events-none focus-visible:duration-0 focus-visible:outline-3 focus-visible:outline-sky-600 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300"
+          className="relative bg-slate-100 border-1 border-gray-300 rounded-full shadow-xl p-2 hover:cursor-pointer hover:bg-slate-200 active:bg-slate-300 disabled:cursor-default disabled:pointer-events-none focus-visible:outline-3 focus-visible:outline-sky-600 dark:bg-gray-600 dark:hover:bg-gray-500 dark:active:bg-gray-400 dark:focus-visible:outline-sky-300"
           title={t('locationButtonTitle')}
           type="button"
           onClick={handleLocateUserPosition}
@@ -353,7 +353,7 @@ const App = () => {
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             viewBox="0 0 24 24"
-            className={`size-[32px] shrink-0 transition-[fill] duration-350 ${locatingUserPosition ? 'fill-gray-300 dark:fill-gray-700' : 'fill-gray-900 dark:fill-white'}`}
+            className={`size-[32px] shrink-0 ${locatingUserPosition ? 'fill-gray-300 dark:fill-gray-700' : 'fill-gray-900 dark:fill-white'}`}
           >
             <path d="M11 22.95v-2q-3.125-.35-5.363-2.587T3.05 13h-2v-2h2q.35-3.125 2.588-5.363T11 3.05v-2h2v2q3.125.35 5.363 2.588T20.95 11h2v2h-2q-.35 3.125-2.587 5.363T13 20.95v2h-2ZM12 19q2.9 0 4.95-2.05T19 12q0-2.9-2.05-4.95T12 5Q9.1 5 7.05 7.05T5 12q0 2.9 2.05 4.95T12 19Zm0-3q-1.65 0-2.825-1.175T8 12q0-1.65 1.175-2.825T12 8q1.65 0 2.825 1.175T16 12q0 1.65-1.175 2.825T12 16Z"/>
           </svg>
@@ -361,7 +361,7 @@ const App = () => {
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             viewBox="0 0 24 24"
-            className={`absolute inset-0 fill-gray-500 animate-spin transition-[opacity_fill] duration-350 ${locatingUserPosition ? 'opacity-100' : 'opacity-0'} dark:fill-gray-400`}
+            className={`absolute inset-0 fill-gray-500 animate-spin transition-[opacity] duration-350 ${locatingUserPosition ? 'opacity-100' : 'opacity-0'} dark:fill-gray-400`}
           >
             <path d="M12 22q-2.05 0-3.875-.788t-3.188-2.15q-1.362-1.362-2.15-3.187T2 12q0-2.075.788-3.888t2.15-3.174Q6.3 3.575 8.124 2.788T12 2q.425 0 .713.288T13 3q0 .425-.288.713T12 4Q8.675 4 6.337 6.337T4 12q0 3.325 2.337 5.663T12 20q3.325 0 5.663-2.337T20 12q0-.425.288-.713T21 11q.425 0 .713.288T22 12q0 2.05-.788 3.875t-2.15 3.188q-1.362 1.362-3.175 2.15T12 22Z"/>
           </svg>

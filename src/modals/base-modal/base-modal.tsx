@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from "react";
-import type { ModalBaseProps } from "./types";
+import type { BaseModalProps } from "./types";
 import { useTranslation } from "react-i18next";
 
-const Modal = (props: ModalBaseProps) => {
+const BaseModal = (props: BaseModalProps) => {
     const { open, onClose, children } = { ...props }
     const [render, setRender] = React.useState(false);
     const timer = useRef<number | undefined>(undefined);
@@ -95,14 +95,14 @@ const Modal = (props: ModalBaseProps) => {
 
     return (
         <div
-            className={`fixed inset-0 flex justify-center items-center z-9999 ${open ? "visible" : "invisible"} ${render ? "bg-black/20" : "bg-transparent"} focus:outline-none [transition:background-color_350ms]`}
+            className={`fixed inset-0 flex justify-center items-center z-9999 [transition:background-color_350ms] ${open ? "visible" : "invisible"} ${render ? "bg-black/20" : "bg-transparent"} focus:outline-none`}
             ref={modalRef}
             role="dialog"
             aria-modal="true"
             tabIndex={-1} // focusable for clearing outside focus 
         >
             <div
-                className={`rounded-md shadow overflow-auto p-6 w-2xl lg:w-3xl 2xl:w-4xl  max-h-full bg-white dark:bg-gray-800 relative ${render ? "scale-100 opacity-100" : "scale-125 opacity-0"} transition-[width_background-color_scale_opacity] duration-350`}
+                className={`rounded-md shadow overflow-auto p-6 w-2xl lg:w-3xl max-h-full bg-white dark:bg-gray-800 relative ${render ? "scale-100 opacity-100" : "scale-125 opacity-0"} [transition:width_350ms,scale_350ms,opacity_350ms]`}
                 onClick={event => event.stopPropagation()}
             >
                 <button
@@ -114,7 +114,7 @@ const Modal = (props: ModalBaseProps) => {
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
-                        className="size-[16px] 2xl:size-[20px] fill-gray-600 fill-gray-900 dark:fill-white transition-[fill_width_height] duration-350"
+                        className="size-[16px] fill-gray-600 fill-gray-900 dark:fill-white"
                     >
                         <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"></path>
                     </svg>
@@ -125,4 +125,4 @@ const Modal = (props: ModalBaseProps) => {
     );
 }
 
-export default Modal;
+export default BaseModal;

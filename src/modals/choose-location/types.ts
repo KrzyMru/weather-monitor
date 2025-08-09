@@ -1,5 +1,5 @@
 import type { LocationGeocodingData } from "../../api/types";
-import type { ModalProps } from "../types";
+import type { ModalProps } from "../base-modal/types";
 
 interface ChooseLocationProps extends ModalProps {
     locations: LocationGeocodingData[];

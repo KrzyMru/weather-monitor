@@ -1,3 +1,3 @@
-import WeatherForecast from './WeatherForecast';
+import WeatherForecast from './weather-forecast';
 
 export { WeatherForecast }

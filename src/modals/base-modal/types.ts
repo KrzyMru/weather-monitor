@@ -3,8 +3,8 @@ interface ModalProps {
     onClose: () => void;
 }
 
-interface ModalBaseProps extends ModalProps {
+interface BaseModalProps extends ModalProps {
     children: React.ReactNode;
 }
 
-export type { ModalBaseProps, ModalProps }
+export type { BaseModalProps, ModalProps }
