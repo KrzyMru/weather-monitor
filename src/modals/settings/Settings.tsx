@@ -1,4 +1,4 @@
-import Modal from "../base-modal/base-modal";
+import { Modal } from "../base-modal";
 import React, { useContext } from "react";
 import type { ModalProps } from "../base-modal/types";
 import { SettingsContext } from "../../contexts";

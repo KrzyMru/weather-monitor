@@ -1,8 +1,9 @@
-import Modal from "../base-modal/base-modal";
+import { Modal } from "../base-modal";
 import type { ChooseLocationProps } from "./types";
-import type { LocationGeocodingData } from "../../api/types";
 import { useTranslation } from "react-i18next";
 import { Heart, HeartBroken } from "../../assets/icons";
+import React from "react";
+import type { GeolocationDataWithFavourite } from "../../components/search-bar/api/types";
 
 const FavouriteIconData: Record<number, React.FunctionComponent<React.SVGProps<SVGSVGElement>>> = {
     0: Heart,
@@ -13,7 +14,7 @@ const ChooseLocation = (props: ChooseLocationProps) => {
     const { open, onClose, locations, onLocationClick, onLocationFavouriteClick } = { ...props }
     const { t } = useTranslation();
 
-    const handleLocationClick = (location: LocationGeocodingData) => {
+    const handleLocationClick = (location: GeolocationDataWithFavourite) => {
         onLocationClick(location);
         onClose();
     }

@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "../base-modal/base-modal";
+import { Modal } from "../base-modal";
 import { weatherCodeData, type WeatherForecastProps } from "./types";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
@@ -14,7 +14,7 @@ dayjs.extend(utc);
 dayjs.extend(weekday);
 
 const WeatherForecast = (props: WeatherForecastProps) => {
-    const { open, onClose, weatherData, geocodingData, onLocationFavouriteClick } = { ...props }
+    const { open, onClose, weatherData, geolocationData, onLocationFavouriteClick } = { ...props }
     const { i18n } = useTranslation();
     dayjs.locale(i18n.language);
 
@@ -57,17 +57,15 @@ const WeatherForecast = (props: WeatherForecastProps) => {
     const selectedDayEndIndex = selectedDayBeginIndex + 24;
     const selectedDayHourlyWeather = hourlyWeather.slice(selectedDayBeginIndex, selectedDayEndIndex);
 
-    const chartHourlyWeather = React.useMemo(() =>
-        selectedDayHourlyWeather.map(data => ({
-            timeAxis: data.time.format("HH:mm"),
-            temperatureAxis: data.temperature_2m,
-            time: data.time,
-            temperature: data.temperature_2m,
-            precipitation_probability: data.precipitation_probability,
-            weather_code_data: data.weather_code_data,
-            is_day: data.is_day,
-        }))
-    , [selectedTime]);
+    const chartHourlyWeather = selectedDayHourlyWeather.map(data => ({
+        timeAxis: data.time.format("HH:mm"),
+        temperatureAxis: data.temperature_2m,
+        time: data.time,
+        temperature: data.temperature_2m,
+        precipitation_probability: data.precipitation_probability,
+        weather_code_data: data.weather_code_data,
+        is_day: data.is_day,
+    }));
 
     return (
         <Modal
@@ -77,7 +75,7 @@ const WeatherForecast = (props: WeatherForecastProps) => {
             <div className="flex flex-col justify-center">
                 <MainBanner
                     weatherData={selectedTimeWeatherData}
-                    geocodingData={geocodingData}
+                    geolocationData={geolocationData}
                     onLocationFavouriteClick={onLocationFavouriteClick}
                     apparent_temperature_unit={weatherData.hourly_units.apparent_temperature}
                     precipitation_probability_unit={weatherData.hourly_units.precipitation_probability}

@@ -1,23 +1,6 @@
-import type { LatLngTuple } from "leaflet"
+import type { LatLngTuple } from "leaflet";
 
-interface GetCircleWeatherDataApiProps {
-    latitude: number,
-    longitude: number,
-    startDate: string,
-    endDate: string,
-}
-
-interface GetGeocodingDataByNameApiProps {
-    name: string,
-    language: string,
-}
-
-interface GetGeocodingDataByCoordsApiProps {
-    coords: LatLngTuple,
-    language: string,
-}
-
-interface LocationWeatherData {
+interface WeatherData {
     latitude: number,
     longitude: number,
     generationtime_ms: number,
@@ -57,18 +40,24 @@ interface LocationWeatherData {
     },
 }
 
-interface LocationGeocodingDataApiResponse {
+interface GeolocationData {
     osm_id: number,
     name: string,
     display_name: string,
     lat: number,
     lon: number,
 }
-interface LocationGeocodingData extends LocationGeocodingDataApiResponse {
-    is_favourite: boolean,
+
+interface GetWeatherDataProps {
+    latitude: number,
+    longitude: number,
+    startDate: string,
+    endDate: string,
 }
 
-export type {
-    GetCircleWeatherDataApiProps, GetGeocodingDataByNameApiProps, GetGeocodingDataByCoordsApiProps,
-    LocationGeocodingDataApiResponse, LocationWeatherData, LocationGeocodingData
+interface GetGeolocationDataCoordsProps {
+    coords: LatLngTuple,
+    language: string,
 }
+
+export type { WeatherData, GeolocationData, GetWeatherDataProps, GetGeolocationDataCoordsProps }

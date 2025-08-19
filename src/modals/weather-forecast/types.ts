@@ -1,4 +1,4 @@
-import type { LocationGeocodingData, LocationWeatherData } from "../../api/types";
+import type { GeolocationDataWithFavourite } from "../../components/search-bar/api/types";
 import type { ModalProps } from "../base-modal/types";
 import { 
     ClearDay, MainlyClearDay, PartlyCloudyDay, OvercastDay, FogDay, DrizzleLightDay, RainLightDay, SnowLightDay, SleetDay, ThunderstormDay, ThunderstormHailLightDay, ThunderstormHailDenseDay,
@@ -10,11 +10,12 @@ import {
     RaindropEmpty,
 } from "../../assets/icons";
 import type dayjs from "dayjs";
+import type { WeatherData } from "../../api/types";
 
 interface WeatherForecastProps extends ModalProps {
-    weatherData: LocationWeatherData;
-    geocodingData: LocationGeocodingData;
-    onLocationFavouriteClick: (location: LocationGeocodingData) => void;
+    weatherData: WeatherData;
+    geolocationData: GeolocationDataWithFavourite;
+    onLocationFavouriteClick: (location: GeolocationDataWithFavourite) => void;
 }
 
 interface HourlyWeatherData {
